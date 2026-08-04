@@ -1,36 +1,36 @@
 from inim.prime.primelan.client import InimPrimeClient
-from inim.prime.primelan.models.zone import ZoneStatus, ZoneExclusionSetRequest
+from inim.prime.primelan.models.zone import ZoneStatus, ZoneBypassSetRequest
 
 
-def get_excluded_zones(
+def get_bypassed_zones(
         zones: dict[int, ZoneStatus],
 ) -> dict[int, ZoneStatus]:
     return {
         zone_id: zone
         for zone_id, zone in zones.items()
-        if zone.excluded
+        if zone.bypass
     }
 
 
-async def include_all_zones(
+async def disable_all_zone_bypasses(
         zones: dict[int, ZoneStatus],
         client: InimPrimeClient,
         timeout: int | None = None,
         retries: int | None = None,
         retry_delay: float | None = None,
 ) -> dict[int, ZoneStatus]:
-    excluded_zones = get_excluded_zones(zones)
+    bypassed_zones = get_bypassed_zones(zones)
 
-    for zone in excluded_zones.values():
-        request = ZoneExclusionSetRequest(
+    for zone in bypassed_zones.values():
+        request = ZoneBypassSetRequest(
             zone_id = zone.id,
-            exclude = False,
+            bypass = False,
         )
-        await client.set_zone_exclusion(
+        await client.set_zone_bypass(
             request = request,
             timeout = timeout,
             retries = retries,
             retry_delay = retry_delay,
         )
 
-    return excluded_zones
+    return bypassed_zones

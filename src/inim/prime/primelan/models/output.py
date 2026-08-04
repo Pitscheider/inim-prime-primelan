@@ -14,7 +14,7 @@ class OutputType(IntEnum):
 
 @dataclass(frozen = True)
 class OutputStatus(PanelItemStatus):
-    terminal: int  # "tl" - output terminal
+    terminal: int  # "tl" - output terminal_id
     state: int
     type: OutputType
     voltage: Optional[float] = None  # "v" only for dimming outputs

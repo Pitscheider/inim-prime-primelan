@@ -11,15 +11,15 @@ from inim.prime.primelan.models.gsm import GSMSStatus
 from inim.prime.primelan.models.log_event import LogEvent
 from inim.prime.primelan.models.output import OutputSetRequest, OutputStatus, OutputType
 from inim.prime.primelan.models.partition import (
-    SetPartitionModeRequest,
-    PartitionMode,
+    SetPartitionArmingStatusRequest,
+    ArmingStatus,
     ClearPartitionAlarmMemoryRequest,
     PartitionStatus,
     PartitionState,
 )
 from inim.prime.primelan.models.scenario import ScenarioStatus, ActivateScenarioRequest
 from inim.prime.primelan.models.system_faults import SystemFaultsStatus, SystemFault
-from inim.prime.primelan.models.zone import ZoneExclusionSetRequest, ZoneStatus, ZoneState
+from inim.prime.primelan.models.zone import ZoneBypassSetRequest, ZoneStatus, ZoneState
 from inim.prime.primelan.const import *
 
 def _handle_status(status: int) -> None:
@@ -199,10 +199,10 @@ class InimPrimeClient:
             int(zone_data["id"]): ZoneStatus(
                 id = int(zone_data["id"]),
                 name = zone_data["lb"],
-                terminal = int(zone_data["tl"]),
+                terminal_id = int(zone_data["tl"]),
                 state = ZoneState(int(zone_data["st"])),
                 alarm_memory = bool(int(zone_data["mm"])),
-                excluded = not bool(int(zone_data["by"])),  # by=1 means included
+                bypass = not bool(int(zone_data["by"])),  # by=1 means included
             )
             for zone_data in zones_data
         }
@@ -260,7 +260,7 @@ class InimPrimeClient:
                 id = int(partition_data["id"]),
                 name = partition_data["lb"],
                 state = PartitionState(int(partition_data["st"])),
-                mode = PartitionMode(int(partition_data["am"])),
+                arming_status = ArmingStatus(int(partition_data["am"])),
                 alarm_memory = bool(int(partition_data["mm"])),
             )
             for partition_data in partitions_data
@@ -375,9 +375,9 @@ class InimPrimeClient:
 
         return system_faults_status
 
-    async def set_zone_exclusion(
+    async def set_zone_bypass(
             self,
-            request: ZoneExclusionSetRequest,
+            request: ZoneBypassSetRequest,
             timeout: int | None = None,
             retries: int | None = None,
             retry_delay: float |None = None,
@@ -385,7 +385,7 @@ class InimPrimeClient:
 
         zone_id = request.zone_id
 
-        p2 = int(request.exclude)
+        p2 = int(request.bypass)
 
         await self._request(
             cmd = CMD_SET_ZONES_MODE,
@@ -422,7 +422,7 @@ class InimPrimeClient:
 
     async def set_partition_mode(
             self,
-            request: SetPartitionModeRequest,
+            request: SetPartitionArmingStatusRequest,
             timeout: int | None = None,
             retries: int | None = None,
             retry_delay: float | None = None,
@@ -434,7 +434,7 @@ class InimPrimeClient:
             retries = retries,
             retry_delay = retry_delay,
             p1 = request.partition_id,
-            p2 = request.mode.value,
+            p2 = request.arming_status.value,
         )
 
         return

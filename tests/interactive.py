@@ -1,12 +1,12 @@
 import asyncio
 
-from inim.prime.primelan.models.zone import ZoneExclusionSetRequest
+from inim.prime.primelan.models.zone import ZoneBypassSetRequest
 from inim.prime.primelan.client import InimPrimeClient
-from inim.prime.primelan.helpers.zones import get_excluded_zones, include_all_zones
+from inim.prime.primelan.helpers.zones import get_bypassed_zones, disable_all_zone_bypasses
 
 from inim.prime.primelan.models.output import OutputSetRequest
 from inim.prime.primelan.models.scenario import ActivateScenarioRequest
-from inim.prime.primelan.models.partition import PartitionMode, SetPartitionModeRequest
+from inim.prime.primelan.models.partition import ArmingStatus, SetPartitionArmingStatusRequest
 
 # Install first: pip install python-dotenv
 from dotenv import load_dotenv
@@ -28,11 +28,11 @@ def print_help():
     print("7. get_log_events")
     print("8. get_gsm_status")
     print("9. get_system_faults")
-    print("10. set_zone_exclusion")
+    print("10. set_zone_bypass")
     print("11. set_output")
     print("12. set_partition_mode")
     print("13. activate_scenario")
-    print("101. get_excluded_zones")
+    print("101. get_bypassed_zones")
     print("102. include_all_zones")
     print("0. quit")
 
@@ -100,14 +100,14 @@ async def main():
                     print(system_faults)
                 elif choice == "10":
                     zone_id = int(input("Zone ID: "))
-                    exclude = bool(int(input("Exclude (default true, 0 = false): ") or 1))
+                    bypass = bool(int(input("Bypass (default true, 0 = false): ") or 1))
 
-                    request = ZoneExclusionSetRequest(
+                    request = ZoneBypassSetRequest(
                         zone_id = zone_id,
-                        exclude = exclude,
+                        bypass = bypass,
                     )
 
-                    await client.set_zone_exclusion(request)
+                    await client.set_zone_bypass(request)
                 elif choice == "11":
                     try:
                         output_id = int(input("Enter output ID: ").strip())
@@ -125,15 +125,15 @@ async def main():
                     try:
                         partition_id = int(input("Enter partition ID: ").strip())
 
-                        print("Select mode:")
-                        for mode in PartitionMode:
+                        print("Select arming_status:")
+                        for mode in ArmingStatus:
                             print(f"{mode.value} = {mode.name}")
 
-                        mode_input = int(input("Enter mode: ").strip())
-                        mode = PartitionMode(mode_input)
+                        mode_input = int(input("Enter arming_status: ").strip())
+                        mode = ArmingStatus(mode_input)
 
                         await client.set_partition_mode(
-                            SetPartitionModeRequest(partition_id = partition_id, mode = mode)
+                            SetPartitionArmingStatusRequest(partition_id = partition_id, arming_status = mode)
                         )
                     except ValueError as e:
                         print("Invalid input:", e)
@@ -142,16 +142,16 @@ async def main():
                     await client.activate_scenario(ActivateScenarioRequest(scenario_id))
                 elif choice == "101":
                     zones = await client.get_zones_status()
-                    excluded = get_excluded_zones(zones)
+                    bypassed = get_bypassed_zones(zones)
 
-                    if excluded:
-                        for zone in excluded.values():
+                    if bypassed:
+                        for zone in bypassed.values():
                             print(zone)
                     else:
-                        print("No zones to exclude")
+                        print("No zones to bypass")
                 elif choice == "102":
                     zones = await client.get_zones_status()
-                    included = await include_all_zones(zones, client)
+                    included = await disable_all_zone_bypasses(zones, client)
 
                     if included:
                         print("Zones included:")
