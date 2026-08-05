@@ -73,7 +73,7 @@ class InimPrimeClient:
             use_https: bool = True,
             ping_on_connect = True,
     ) -> None:
-        scheme = "https" if use_https else "primelan"
+        scheme = "https" if use_https else "http"
         self._base_url = f"{scheme}://{host.rstrip('/')}"
         self._api_key = api_key
         self._timeout = aiohttp.ClientTimeout(total = timeout)
