@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="00b3dc4b-1db8-442c-9d4a-13f246f315d0" name="Changes" comment="Updated idea">
+      <change beforePath="$PROJECT_DIR$/.idea/inim-prime-primelan.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inim-prime-primelan@1.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/interactive.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/interactive.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -261,8 +263,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-PY-262.8665.309" />
-        <option value="bundled-python-sdk-c6d794e1806d-5bd6d13a2a75-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-262.8665.309" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-PY-262.8665.369" />
+        <option value="bundled-python-sdk-6fa658e1df1a-5bd6d13a2a75-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-262.8665.369" />
       </set>
     </attachedChunks>
   </component>
@@ -292,6 +294,7 @@
       <workItem from="1784801630462" duration="3643000" />
       <workItem from="1784835586243" duration="50000" />
       <workItem from="1785581567606" duration="31000" />
+      <workItem from="1786360703349" duration="41000" />
     </task>
     <task id="LOCAL-00001" summary="Refactored">
       <option name="closed" value="true" />
